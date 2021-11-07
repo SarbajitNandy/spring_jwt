@@ -16,14 +16,21 @@ public class UserService {
 
     public UserDTO insertUser(UserDTO user) throws Exception {
         Optional<User> option = userRepository.findByEmail(user.getEmail());
-        if (option.isEmpty()) {
+//        if (option.isEmpty()) {
+//
+//        } else {
+//            throw new Exception(user.getName() + " already present.");
+//        }
+        try {
+            option.get();
+            throw new Exception(user.getName() + " already present.");
+        } catch (Exception e) {
             User newUser = User.createUser(user);
             System.out.println("new Id " + newUser.getId());
             userRepository.save(newUser);
             return UserDTO.createUserDto(newUser);
-        } else {
-            throw new Exception(user.getName() + " already present.");
         }
+
     }
 
     public UserDTO findById(int id) throws Exception{
